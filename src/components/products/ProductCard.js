@@ -1,13 +1,18 @@
 import React from "react";
-
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import { useShoppingCart, formatCurrencyString } from "use-shopping-cart";
 
 const ProductCard = ({ product }) => {
     const { addItem } = useShoppingCart()
+    const image = getImage(product.image);
 
     return (
         <div className="card">
-            <img src={product.image} alt="" />
+            <GatsbyImage
+                alt={product.name}
+                image={image}
+                className="product-img"
+            />
             <h4>{product.name}</h4>
             <p>
                 Price:{" "}

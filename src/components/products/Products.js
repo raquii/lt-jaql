@@ -2,7 +2,7 @@ import React from "react";
 import { graphql, StaticQuery } from "gatsby";
 import ProductCard from "./ProductCard";
 
-export default (props) => (
+const Products = (props) => (
     <StaticQuery
         query={graphql`
         query ProductPrices {
@@ -10,19 +10,24 @@ export default (props) => (
             filter: { active: { eq: true }, currency: { eq: "usd" } }
             sort: { fields: [unit_amount] }
             ) {
-            edges {
-                node {
-                id
-                active
-                currency
-                unit_amount
-                product {
+                edges {
+                  node {
                     id
-                    name
-                    images
+                    active
+                    currency
+                    unit_amount
+
+                    product {
+                        name
+                        id
+                      localFiles {
+                        childImageSharp {
+                          gatsbyImageData
+                        }
+                      }
+                    }
+                  }
                 }
-                }
-            }
             }
         }
         `}
@@ -34,7 +39,7 @@ export default (props) => (
                         name: price.product.name,
                         price: price.unit_amount,
                         currency: price.currency,
-                        image: price.product.images,
+                        image: price["product"]["localFiles"][0],
                     }
                     return <ProductCard key={price.id} product={newProduct} />
                 })}
@@ -42,3 +47,5 @@ export default (props) => (
         )}
     />
 )
+
+export default Products;
